@@ -1,0 +1,45 @@
+name: Refresh review dependencies
+on:
+  push:
+    paths:
+      - '.github/workflows/refresh.yml'
+permissions:
+  contents: read
+jobs:
+  refresh:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+      NEXT_PUBLIC_CONTENT_SOURCE: demo
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Update review dependencies
+        run: |
+          npm install --package-lock-only --ignore-scripts --save-exact next@16.4.6 sanity@6.23.0 next-sanity@13.4.0
+          npm install --package-lock-only --ignore-scripts --save-dev --save-exact eslint-config-next@16.4.6
+          npm update --package-lock-only --ignore-scripts
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run build
+      - run: npm test
+      - name: Dependency audit
+        run: |
+          npm audit --json > /tmp/review-audit.json || true
+          node -e 'const a=require("/tmp/review-audit.json"); console.log(a.metadata); for(const [name,v] of Object.entries(a.vulnerabilities||{})) console.log(JSON.stringify({name,severity:v.severity,direct:v.isDirect,fix:v.fixAvailable,via:v.via}));'
+      - name: Save verified package updates
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package.json package-lock.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Update review edition dependencies after validation"
+            git push origin HEAD:main
+          fi
