@@ -45,6 +45,12 @@ For manual review, start `npm run dev` or run `npm start` after building:
 
 Please distinguish a defect in the included behavior from a feature deliberately outside this edition. The absence of accounts, integrations, advanced editors, or operational workflows is part of the reduced scope.
 
+## Dependency maintenance
+
+The review edition pins its direct package versions and includes a lockfile. CI rejects high or critical npm audit findings. Moderate advisories in the Sanity CLI and ESLint dependency chains may still appear; inspect `npm audit` for the current report before extending or deploying the sample. Passing the audit threshold is not a guarantee that every dependency is free of vulnerabilities.
+
+Two dependency overrides keep the YAML 3.x and TOML parsers on patched releases within their existing major versions. These cover the Sanity CLI's indirect dependencies and do not change the page content model.
+
 ## Reporting an observation
 
 Include the file or route, the steps or code that demonstrate the issue, the expected behavior, the observed behavior, and a suggested change if you have one. Small, concrete examples are more useful than a general rewrite recommendation.

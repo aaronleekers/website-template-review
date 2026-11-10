@@ -1,4 +1,4 @@
-# Website Template · Review Edition
+# Website Template Review Edition
 
 A compact Next.js and Sanity website sample, prepared for code review. It shows how a URL becomes a content query, how structured content selects React components, and how editors can manage pages without changing application code.
 
@@ -23,6 +23,8 @@ The edition does not include the larger application's integrations, operational 
 Use Node.js 22.14 or newer in the 22.x line (see [`.nvmrc`](.nvmrc)) and npm.
 
 ```sh
+git clone https://github.com/aaronleekers/website-template-review.git
+cd website-template-review
 npm ci
 npm run dev
 ```
