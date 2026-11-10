@@ -8,7 +8,13 @@ const richText = defineType({
       lists: [{title: 'Bullet', value: 'bullet'}, {title: 'Number', value: 'number'}],
       marks: {
         decorators: [{title: 'Strong', value: 'strong'}, {title: 'Emphasis', value: 'em'}],
-        annotations: [{name: 'link', type: 'object', title: 'Link', fields: [{name: 'href', type: 'url', validation: (rule) => rule.required().uri({allowRelative: true, scheme: ['http', 'https', 'mailto', 'tel']})]}],
+        annotations: [{
+          name: 'link', type: 'object', title: 'Link',
+          fields: [{
+            name: 'href', type: 'url',
+            validation: (rule) => rule.required().uri({allowRelative: true, scheme: ['http', 'https', 'mailto', 'tel']}),
+          }],
+        }],
       },
     })],
   })],
